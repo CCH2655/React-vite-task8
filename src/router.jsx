@@ -1,18 +1,20 @@
 // src/router.jsx
 import { createHashRouter } from "react-router";
 import FrontendLayout from "./layout/FrontendLayout";
-import Home from "./views/front/Home";
-import Products from "./views/front/Products";
-import SingleProduct from "./views/front/SingleProduct";
-import Cart from "./views/front/Cart";
-import NotFound from "./views/front/NotFound";
-import Checkout from "./views/front/Checkout";
+import Home from "./views/frontend/Home";
+import Products from "./views/frontend/Products";
+import SingleProduct from "./views/frontend/SingleProduct";
+import Cart from "./views/frontend/Cart";
+import Checkout from "./views/frontend/Checkout";
+import CheckoutSuccess from "./views/frontend/CheckoutSuccess";
 import Login from "./views/Login";
 
 import AdminLayout from "./layout/AdminLayout";
 import AdminProducts from "./views/admin/AdminProducts";
 import AdminOrders from "./views/admin/AdminOrders";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+import NotFound from "./views/frontend/NotFound";
 
 export const router = createHashRouter([
   {
@@ -24,20 +26,28 @@ export const router = createHashRouter([
         element: <Home />,
       },
       {
-        path: "product",
-        element: <Products />,
+        path: 'product',
+        element: <Products/>
       },
       {
-        path: "product/:id", // 動態參數
-        element: <SingleProduct />,
+        path: 'product/:id',
+        element: <SingleProduct/>
       },
       {
-        path: "cart",
-        element: <Cart />,
+        path: 'cart',
+        element: <Cart/>
       },
       {
-        path: "checkout",
-        element: <Checkout />,
+        path: 'checkout',
+        element: <Checkout/>
+      },
+      {
+        path: 'checkout-success',
+        element: <CheckoutSuccess/>
+      },
+      {
+        path: 'checkout-success',
+        element: <CheckoutSuccess/>
       },
       {
         path: "login",

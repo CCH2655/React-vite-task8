@@ -34,7 +34,6 @@ function AdminProducts() {
   const [templateData, setTemplateData] = useState(INITIAL_TEMPLATE_DATA);
   const [modalType, setModalType] = useState("");
   const [pagination, setPagination] = useState({});
-  const dispatch = useDispatch();
   const { showSuccess, showError } = useMessage();
 
   const getProducts = async (page = 1) => {
@@ -45,8 +44,6 @@ function AdminProducts() {
       setProducts(response.data.products);
       setPagination(response.data.pagination);
     } catch (error) {
-      // console.error("取得產品失敗：", error.response?.data?.message);
-      // dispatch(createAsyncMessage(error.response.data));
       showError(error.response.data.message);
     }
   };
@@ -120,22 +117,22 @@ function AdminProducts() {
         <div className="card">
           <div className="card p-4">
             <div className="d-flex justify-content-between align-items-center">
-              <h2>產品列表</h2>
+              <h2>商品管理</h2>
               
               <div className="d-flex justify-content-between gap-4">
-                <button
+                {/* <button
                   type="button"
                   className="btn btn-danger"
                   onClick={() => logout()}
                 >
                   登出
-                </button>
+                </button> */}
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={() => openModal(INITIAL_TEMPLATE_DATA, "create")}
                 >
-                  建立新的產品
+                  建立新的商品
                 </button>
               </div>
             </div>
