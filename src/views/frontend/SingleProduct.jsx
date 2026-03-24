@@ -11,7 +11,7 @@ function SingleProduct() {
   const [qty, setQty] = useState(1);
   const [openSection, setOpenSection] = useState(0);
   const dispatch = useDispatch();
-  const { showSuccess, showError } = useMessage();
+  const { showSuccess } = useMessage();
 
   useEffect(() => {
     const getProduct = async (productId) => {

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -8,7 +7,7 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 
 function Login() {
   const navigate = useNavigate();
-  const { showSuccess, showError } = useMessage();
+  const { showSuccess } = useMessage();
   const {
     register,
     handleSubmit,

@@ -31,12 +31,23 @@ const Products = () => {
       setProducts(response.data.products);
       setPagination(response.data.pagination);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    getProducts(1, currentCategory);
+    const getFirstProducts = async (page = 1, category = currentCategory) => {
+      try {
+        const targetCategory = category === 'all' ? '' : category;
+        const response = await getProductsApi(page, targetCategory);
+        
+        setProducts(response.data.products);
+        setPagination(response.data.pagination);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFirstProducts(1, currentCategory);
   }, [currentCategory]);
 
   const handleViewDetail = (e, id) => {

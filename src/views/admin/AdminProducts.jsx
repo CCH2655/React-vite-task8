@@ -3,8 +3,6 @@ import * as bootstrap from "bootstrap";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
 import ProductModal from "../../components/ProductModal";
-import { useDispatch } from "react-redux";
-import { createAsyncMessage } from "../../slice/messageSlice";
 import useMessage from "../../hooks/useMessage";
 import { useNavigate } from "react-router";
 
@@ -34,19 +32,7 @@ function AdminProducts() {
   const [templateData, setTemplateData] = useState(INITIAL_TEMPLATE_DATA);
   const [modalType, setModalType] = useState("");
   const [pagination, setPagination] = useState({});
-  const { showSuccess, showError } = useMessage();
-
-  const getProducts = async (page = 1) => {
-    try {
-      const response = await axios.get(
-        `${API_BASE}/api/${API_PATH}/admin/products?page=${page}`,
-      );
-      setProducts(response.data.products);
-      setPagination(response.data.pagination);
-    } catch (error) {
-      showError(error.response.data.message);
-    }
-  };
+  const { showError } = useMessage();
 
   const openModal = (product, type) => {
     setTemplateData({
@@ -60,55 +46,79 @@ function AdminProducts() {
     productModalRef.current.hide();
   };
 
-  const logout = async () => {
-    try {
-      await axios.post(`${API_BASE}/logout`);
-      document.cookie = `hexToken=;expires=;`;
-      axios.defaults.headers.common.Authorization = '';
+  
 
-      showSuccess("已登出");
-      navigate("/login");
+  useEffect(() => {
+    // 1. 初始化外部套件 (非 React 管理的 DOM)
+    const modalElement = document.querySelector("#productModal");
+    if (modalElement) {
+      productModalRef.current = new bootstrap.Modal(modalElement, {
+        keyboard: false,
+      });
+  
+      const hideHandler = () => {
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+      };
+  
+      modalElement.addEventListener("hide.bs.modal", hideHandler);
+
+      return () => {
+        modalElement.removeEventListener("hide.bs.modal", hideHandler);
+      };
+    }
+  }, []);
+  
+  
+
+  const getProducts = async (page = 1) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE}/api/${API_PATH}/admin/products?page=${page}`,
+      );
+
+      setProducts(response.data.products);
+      setPagination(response.data.pagination);
     } catch (error) {
-      showError("登出失敗: " + error.response.data.message);
-    }
-  }
-
-  const checkAdmin = async () => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("hexToken="))
-      ?.split("=")[1];
-
-    if (token) {
-      axios.defaults.headers.common.Authorization = token;
-    }
-    
-    try {
-      await axios.post(`${API_BASE}/api/user/check`);
-    } catch (err) {
-      // console.log("權限檢查失敗：", err.response?.data?.message);
+      showError(error.response.data.message);
     }
   };
 
   useEffect(() => {
+    const checkAdmin = async () => {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("hexToken="))
+        ?.split("=")[1];
+  
+      if (token) {
+        axios.defaults.headers.common.Authorization = token;
+      }
+      
+      try {
+        await axios.post(`${API_BASE}/api/user/check`);
+      } catch (error) {
+        console.log( error.response?.data?.message);
+        navigate("/login");
+      }
+    };
+
     checkAdmin();
 
-    // 初始化 Bootstrap Modal
-    productModalRef.current = new bootstrap.Modal("#productModal", {
-      keyboard: false,
-    });
-
-    // Modal 關閉時移除焦點
-    document
-      .querySelector("#productModal")
-      .addEventListener("hide.bs.modal", () => {
-        if (document.activeElement instanceof HTMLElement) {
-          document.activeElement.blur();
-        }
-      });
-
-    // 載入Products列表的時候，執行getProducts
-    getProducts(); 
+    const getFisrtProducts = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE}/api/${API_PATH}/admin/products`,
+        );
+  
+        setProducts(response.data.products);
+        setPagination(response.data.pagination);
+      } catch (error) {
+        showError(error.response.data.message);
+      }
+    };
+    getFisrtProducts();
   }, []);
 
   return (

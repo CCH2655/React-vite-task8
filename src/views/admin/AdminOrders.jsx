@@ -12,7 +12,7 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, orderId }) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-2">確認刪除訂單</h3>
         <p className="text-gray-500 mb-6">
@@ -116,7 +116,12 @@ function AdminOrders() {
   const checkAdmin = async () => {
     const token = document.cookie.split("; ").find((row) => row.startsWith("hexToken="))?.split("=")[1];
     if (token) axios.defaults.headers.common.Authorization = token;
-    try { await axios.post(`${API_BASE}/api/user/check`); } catch (err) { navigate("/login"); }
+    try {
+      await axios.post(`${API_BASE}/api/user/check`);
+    } catch (error) {
+      console.log( error.response?.data?.message);
+      navigate("/login");
+    }
   };
 
   useEffect(() => { checkAdmin(); dispatch(createAsyncGetAdminOrders()); }, [dispatch]);

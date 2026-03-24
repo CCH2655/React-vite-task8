@@ -10,7 +10,7 @@ function Cart() {
   const carts = useSelector(state => state.cart.carts);
   const final_total = useSelector(state => state.cart.final_total);
   const dispatch = useDispatch();
-  const { showSuccess, showError } = useMessage();
+  const { showSuccess } = useMessage();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingProductId, setLoadingProductId] = useState(null);
@@ -22,15 +22,15 @@ function Cart() {
     showSuccess("成功移除購物車");
   };
 
-  // const handleShowMore = (product) => {
-  //   setLoadingProductId(product.id);
-  //   // 模擬載入感
-  //   setTimeout(() => {
-  //     setSelectedProduct(product);
-  //     setIsModalOpen(true);
-  //     setLoadingProductId(null);
-  //   }, 300);
-  // };
+  const handleShowMore = (product) => {
+    setLoadingProductId(product.id);
+    // 模擬載入感
+    setTimeout(() => {
+      setSelectedProduct(product);
+      setIsModalOpen(true);
+      setLoadingProductId(null);
+    }, 300);
+  };
 
   return (
     <div className="container mx-auto px-4 py-4 relative">
@@ -73,8 +73,8 @@ function Cart() {
                       </Link>
                     </div>
                     
-                    <div className="flex items-center gap-2 mt-2">
-                      {/* <button 
+                    <div className="hidden flex items-center gap-2 mt-2">
+                      <button 
                         onClick={() => handleShowMore(cartItem.product)}
                         disabled={loadingProductId === cartItem.product.id}
                         className="px-2 py-1 overflow-hidden bg-white border border-gray-200 text-[10px] text-gray-600 rounded hover:bg-gray-100 hover:text-black transition-all flex items-center justify-center min-w-[60px] shadow-sm active:scale-95 disabled:opacity-70"
@@ -84,8 +84,9 @@ function Cart() {
                         ) : (
                           "查看詳細"
                         )}
-                      </button> */}
+                      </button>
                     </div>
+
                   </div>
 
                   <div className="flex justify-between items-center mt-2">
@@ -169,8 +170,7 @@ function Cart() {
                   <div>
                     <h4 className="font-bold text-gray-800 text-sm">{selectedProduct.title}</h4>
                     <div className="bg-gray-50 p-2 rounded mt-2 text-[11px] text-gray-500 leading-relaxed border border-gray-100">
-                      商品 ID: {selectedProduct.id}<br/>
-                      這是一段測試用的詳細描述資訊，展示 Tailwind Modal 的緊湊排版。
+                      商品 ID: {selectedProduct.id}
                     </div>
                   </div>
                 </div>
