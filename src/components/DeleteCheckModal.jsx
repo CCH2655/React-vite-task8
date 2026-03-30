@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
 import useMessage from "../hooks/useMessage";
 
@@ -18,14 +17,14 @@ function DeleteCheckModal({
         :
         `${API_BASE}/api/${API_PATH}/carts`;
 
-      const response = await axios.delete(url);
+      await axios.delete(url);
 
       showSuccess("產品刪除成功！")
       // 關閉 Modal 並重新載入資料
       closeModal();
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || err.message;
-      showError("刪除失敗："  + errorMsg)
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || error.message;
+      showError("刪除失敗："  + errorMsg);
     }
   };
 

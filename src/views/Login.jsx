@@ -5,9 +5,19 @@ import useMessage from "../hooks/useMessage";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
+
+const setAuthSession = ({token, expired}) => {
+  if (token) {
+    const expirationDate = new Date(expired).toUTCString();
+    document.cookie = `hexToken=${token};expires=${expirationDate};`;
+    axios.defaults.headers.common.Authorization = `${token}`;
+  }
+};
+
+
 function Login() {
   const navigate = useNavigate();
-  const { showSuccess } = useMessage();
+  const { showSuccess, showError } = useMessage();
   const {
     register,
     handleSubmit,
@@ -24,13 +34,14 @@ function Login() {
     try {
       const response = await axios.post(`${API_BASE}/admin/signin`, formData);
       const { token, expired } = response.data;
-      document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
-      axios.defaults.headers.common.Authorization = `${token}`;
+
+      setAuthSession({token, expired});
 
       navigate(`/admin/product`);
       showSuccess('成功登入');
     } catch (error) {
-      alert(error.response?.data?.message || '登入失敗');
+      // alert(error.response?.data?.message || '登入失敗');
+      showError(error.response?.data?.message || '登入失敗')
     }
   };
 

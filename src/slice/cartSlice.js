@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { postAddCartApi } from "../services/cart";
+import { deleteDelSingleCartApi, postAddCartApi, putUpdateCartApi } from "../services/cart";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -31,7 +31,7 @@ export const createAsyncGetCart = createAsyncThunk(
       const response = await axios.get(url);
       dispatch(updateCart(response.data.data));
     } catch (error) {
-      // console.log(error.response.data);
+      console.log(error.response.data);
     }
   }
 );
@@ -40,10 +40,10 @@ export const createAsyncAddCart = createAsyncThunk(
   'cart/createAsyncAddCart',
   async ({id, qty = 1}, { dispatch }) => {
     try {
-      const response = await postAddCartApi({id, qty});
+      await postAddCartApi({id, qty});
       dispatch(createAsyncGetCart());
     } catch (error) {
-      // console.log(error.response.data);
+      console.log(error.response.data);
     }
   }
 );
@@ -52,11 +52,24 @@ export const createAsyncDelCart = createAsyncThunk(
   'cart/createAsyncDelCart',
   async ( id, { dispatch }) => {
     try {
-      const url = `${API_BASE}/api/${API_PATH}/cart/${id}`
-      const response = await axios.delete(url);
+      // const url = `${API_BASE}/api/${API_PATH}/cart/${id}`
+      // await axios.delete(url);
+      await deleteDelSingleCartApi({id});
       dispatch(createAsyncGetCart());
     } catch (error) {
-      // console.log(error.response.data);
+      console.log(error.response.data);
+    }
+  }
+);
+
+export const createAsyncUpdateCart = createAsyncThunk(
+  'cart/createAsyncUpdateCart',
+  async ({id, product_id, qty = 1}, { dispatch }) => {
+    try {
+      await putUpdateCartApi({id, product_id, qty})
+      dispatch(createAsyncGetCart());
+    } catch (error) {
+      console.log(error.response.data);
     }
   }
 );

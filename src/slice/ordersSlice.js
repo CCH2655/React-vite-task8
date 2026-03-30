@@ -53,7 +53,7 @@ export const createAsyncDelAdminOrders = createAsyncThunk(
   async (id, { dispatch }) => {
     try {
       const url = `${API_BASE}/api/${API_PATH}/admin/order/${id}`;
-      const response = await axios.delete(url);
+      await axios.delete(url);
       dispatch(createAsyncGetOrders());
     } catch (error) {
       console.error(error.response?.data?.message || "取得訂單失敗");

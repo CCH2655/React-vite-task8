@@ -22,7 +22,7 @@ function SingleProductModal({ product, addCart, closeModal }) {
             ></button>
           </div>
           <div className="modal-body">
-            <img className="w-100" src={product.imageUrl} />
+            <img className="w-100" src={product.imageUrl} alt="主圖"/>
             <p className="mt-3">產品內容：{product.content}</p>
             <p>產品描述：{product.description}</p>
             <p>

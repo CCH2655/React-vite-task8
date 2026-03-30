@@ -107,7 +107,7 @@ function ProductModal({
 
   const delProductData = async (id) => {
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `${API_BASE}/api/${API_PATH}/admin/product/${id}`
       );
       
@@ -141,6 +141,7 @@ function ProductModal({
       }))
     } catch (error) {
       // console.error("Upload error:", error);
+      showError("Upload error:", error);
     }
 
   }

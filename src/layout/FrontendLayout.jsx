@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router";
+import { Outlet, Link, ScrollRestoration } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -7,6 +7,7 @@ function FrontendLayout() {
     <>
       <div className="flex flex-col min-h-screen">
         <Header />
+        <ScrollRestoration/>
         
         <main className="flex-grow bg-[#F5F2ED]">
           <Outlet />

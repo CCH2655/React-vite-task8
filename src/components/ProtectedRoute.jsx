@@ -2,12 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import { Navigate } from "react-router";
+import useMessage from "../hooks/useMessage";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 function ProtectedRoute({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { showError } = useMessage();
 
   useEffect(() => {
     const token = document.cookie
@@ -23,8 +25,9 @@ function ProtectedRoute({ children }) {
       try {
         await axios.post(`${API_BASE}/api/user/check`);
         setIsAuth(true);
-      } catch (err) {
-        // console.log("權限檢查失敗");
+      } catch (error) {
+        const errorMsg = error.response?.data?.message;
+        showError("權限檢查失敗:", errorMsg);
       } finally {
         setLoading(false);
       }
